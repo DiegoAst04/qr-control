@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'theme/theme.dart';
 import 'screens/login.dart';
 import 'screens/register.dart';
-import 'screens/new_event/step_1.dart';
-import 'screens/new_event/step_2.dart';
+import 'screens/new_event_form/new_event_form.dart';
 import 'screens/home.dart';
 
 void main() {
@@ -18,8 +18,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'QR Control',
       theme: AppTheme.darkTheme,
+      supportedLocales: const [
+        Locale('es'),
+        Locale('en', 'US')
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate
+      ],
       debugShowCheckedModeBanner: false,
-      home: const LoginScreen(),
+      home: NewEventForm(),
     );
   }
 }

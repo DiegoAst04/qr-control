@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../components/widgets.dart';
 import '../theme/colors.dart';
+import 'home.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -22,10 +23,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final passwordFocusNode = FocusNode();
   final confPasswordFocusNode = FocusNode();
   String _password = "";
-
-  void _nada() {
-    debugPrint("si");
-  }
 
   @override
   void initState() {
@@ -124,7 +121,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     isPassword: true,
                   ),
                   MiButton(
-                    onPressed: _nada,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const HomeScreen()
+                        )
+                      );
+                    },
                     text: "Registrarse",
                   ),
                   const Padding(

@@ -1,46 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'colors.dart';
 
 class AppTheme {
   static ThemeData darkTheme = ThemeData(
-    primarySwatch: Colors.red,
+    primarySwatch: Colors.green,
     primaryColor: AppColors.primaryColor,
     //secondaryHeaderColor: AppColors.secondaryColor,
     scaffoldBackgroundColor: AppColors.primaryDark,
     hintColor: AppColors.secondaryColor,
 
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
-        fontFamily: 'Poppins',
+    textTheme: TextTheme(     // Titulo login y register
+      displayLarge: GoogleFonts.poppins(
         fontWeight: FontWeight.bold,
         fontSize: 36,
         color: AppColors.primaryText
       ),
-      titleMedium: TextStyle(
-        fontFamily: 'Poppins',
+      titleMedium: GoogleFonts.poppins(
         fontWeight: FontWeight.normal,
         fontSize: 20,
         color: AppColors.primaryText
       ),
-      bodyLarge: TextStyle(     // Used on inputs
-        fontFamily: 'Poppins',
+      bodyLarge: GoogleFonts.poppins(     // Used on inputs
+         fontWeight: FontWeight.normal,
+        color: AppColors.primaryText,
+        fontSize: 16
+      ),
+      bodyMedium: GoogleFonts.poppins(
         fontWeight: FontWeight.normal,
         color: AppColors.primaryText,
-        fontSize: 16,
-      ),
-      bodyMedium: TextStyle( //TODO: ir eliminando xd
-        fontFamily: 'Poppins',
-        fontWeight: FontWeight.normal,
         fontSize: 16,
       )
     ),
 
-    appBarTheme: const AppBarTheme(
+    iconTheme: const IconThemeData(
+      color: AppColors.primaryText
+    ),
+
+    appBarTheme: AppBarTheme(
       backgroundColor: AppColors.primaryDark,
       foregroundColor: AppColors.primaryText,
-      titleTextStyle: TextStyle(
-        //TODO: hacer que funcione esta wea que no se cambia
-          fontFamily: 'Poppins',
+      titleTextStyle: GoogleFonts.poppins(
           fontWeight: FontWeight.normal,
           fontSize: 20,
           color: AppColors.primaryText

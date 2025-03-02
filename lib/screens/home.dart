@@ -11,15 +11,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  void _nada() {
-    debugPrint("si");
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mis tickets"),
+        title: const Text("Mis tickets")
       ),
       body: SafeArea(
         child: Padding(
@@ -28,10 +24,12 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 8,
             children: [
-              Text(
+              const Text(
                 "Enero",
                 style: TextStyle(
-                  color: AppColors.primaryText
+                  color: AppColors.primaryText,
+                  fontSize: 20,
+                  fontFamily: 'Poppins'
                 ),
               ),
               EventBox(

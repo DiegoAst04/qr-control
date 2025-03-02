@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'register.dart';
+import 'home.dart';
 import '../components/widgets.dart';
 import '../theme/colors.dart';
 
@@ -27,10 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
     emailFocusNode.dispose();
     passwordFocusNode.dispose();
     super.dispose();
-  }
-
-  void _nada() {
-    debugPrint("si");
   }
 
   @override
@@ -99,7 +96,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ]
                     ),
                     MiButton(
-                      onPressed: _nada,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen()
+                          )
+                        );
+                      },
                       text: "Entrar",
                     )
                   ]
@@ -148,8 +152,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       text: "Regístrate",
                       style: const TextStyle(
                         color: AppColors.accentedText,
-                        decoration: TextDecoration.underline,
-                        decorationColor: AppColors.accentedText
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
