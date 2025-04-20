@@ -8,41 +8,51 @@ import '../theme/colors.dart';
 //  | |_/ / |_| | |_| || (_) | | | |
 //  \____/ \__,_|\__|\__\___/|_| |_|
 
-class MiButton extends StatefulWidget {
-  final String text;
+class Button extends StatefulWidget {
+  final String? text;
   final VoidCallback? onPressed;
+  final IconData? prefixIcon;
 
-  const MiButton({
+  const Button({
     super.key,
-    required this.text,
-    this.onPressed
+    this.text,
+    this.onPressed,
+    this.prefixIcon
   });
 
   @override
-  _MiButtonState createState() => _MiButtonState();
+  ButtonState createState() => ButtonState();
 }
 
-class _MiButtonState extends State<MiButton> {
+class ButtonState extends State<Button> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-            onPressed: widget.onPressed,
-            style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor
-            ),
-            child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Text(
-                  widget.text,
-                  style: const TextStyle(
-                    color: AppColors.primaryText,
-                    fontSize: 20,
-                  ),
-                )
-            )
+    return ElevatedButton(
+      onPressed: widget.onPressed ?? () {},
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primaryColor,
+        iconColor: AppColors.primaryText,
+        iconSize: 20
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 8,
+          children: [
+            if (widget.prefixIcon != null)
+              Icon(widget.prefixIcon),
+            if (widget.text != null)
+              Text(
+                widget.text!,
+                style: const TextStyle(
+                  color: AppColors.primaryText,
+                  fontSize: 20,
+                ),
+              ),
+          ],
         )
+      )
     );
   }
 }

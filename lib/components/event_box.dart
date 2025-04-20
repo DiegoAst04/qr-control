@@ -23,9 +23,9 @@ class EventBox extends StatefulWidget {
   });
 
   @override
-  _EventBoxState createState() => _EventBoxState();
+  EventBoxState createState() => EventBoxState();
 }
-class _EventBoxState extends State<EventBox> {
+class EventBoxState extends State<EventBox> {
   int _getWeekDay() {
     return widget.date.weekday - 1;
   }
@@ -82,7 +82,6 @@ class _EventBoxState extends State<EventBox> {
                     Text(
                       "${weekDays[_getWeekDay()]} ${_getDate()} de ${months[_getMonth()]}",
                       style: const TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 10,
                         fontWeight: FontWeight.w100,
                         color: AppColors.primaryText
@@ -93,7 +92,6 @@ class _EventBoxState extends State<EventBox> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 20,
                         fontWeight: FontWeight.normal,
                         color: AppColors.primaryText,
@@ -102,7 +100,6 @@ class _EventBoxState extends State<EventBox> {
                     Text(
                       widget.place,
                       style: const TextStyle(
-                        fontFamily: 'Poppins',
                         fontSize: 12,
                         fontWeight: FontWeight.normal,
                         color: AppColors.secondaryText

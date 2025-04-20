@@ -1,54 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_control/components/invitation.dart';
 import '../../components/widgets.dart';
 import '../../theme/colors.dart';
 import 'event_form_controller.dart';
 
 Widget buildPage1(EventFormController controller) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Column(
-      spacing: 20,
-      children: [
-        FormTextBox(
-          label: "Nombre del evento",
-          hintText: "Festival de bla bla",
-          prefixIcon: Icons.local_activity_rounded,
-          controller: controller.eventNameController,
-          textCapitalization: TextCapitalization.sentences,
-          focusNode: controller.eventFocusNode,
-          textInputAction: TextInputAction.next,
-        ),
-        FormTextBox(
-          label: "Artista(s)",
-          hintText: "Los Macarrones",
-          prefixIcon: Icons.music_note_rounded,
-          controller: controller.artistController,
-          textCapitalization: TextCapitalization.words,
-          focusNode: controller.artistFocusNode,
-          textInputAction: TextInputAction.next,
-        ),
-        FormTextBox(
-          label: "Descripción",
-          hintText: "Este evento bla bla",
-          prefixIcon: Icons.insert_comment_rounded,
-          controller: controller.descriptionController,
-          textCapitalization: TextCapitalization.sentences,
-          focusNode: controller.descriptionFocusNode,
-        )
-      ],
-    ),
+  return GestureDetector(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        spacing: 20,
+        children: [
+          FormTextBox(
+            label: "Nombre del evento",
+            hintText: "Festival de bla bla",
+            prefixIcon: Icons.local_activity_rounded,
+            controller: controller.eventNameController,
+            textCapitalization: TextCapitalization.sentences,
+            focusNode: controller.eventFocusNode,
+            textInputAction: TextInputAction.next,
+          ),
+          FormTextBox(
+            label: "Artista(s)",
+            hintText: "Los Macarrones",
+            prefixIcon: Icons.music_note_rounded,
+            controller: controller.artistController,
+            textCapitalization: TextCapitalization.words,
+            focusNode: controller.artistFocusNode,
+            textInputAction: TextInputAction.next,
+          ),
+          FormTextBox(
+            label: "Descripción",
+            hintText: "Este evento bla bla",
+            prefixIcon: Icons.insert_comment_rounded,
+            controller: controller.descriptionController,
+            textCapitalization: TextCapitalization.sentences,
+            focusNode: controller.descriptionFocusNode,
+          )
+        ]
+      )
+    )
   );
 }
 
 Widget buildPage2(EventFormController controller, BuildContext context) {
   Future<void> selectDate() async {
-    DateTime? selectedDate = await showDatePicker(
+    final DateTime? selectedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(DateTime.now().year),
-      lastDate: DateTime(DateTime.now().year + 15),
-      locale: const Locale('es')
+      firstDate: DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day
+      ),
+      lastDate: DateTime(
+        DateTime.now().year + 15,
+        DateTime.december,
+        31
+      )
     );
 
     if (selectedDate != null) {
@@ -58,14 +68,16 @@ Widget buildPage2(EventFormController controller, BuildContext context) {
   }
 
   Future<void> selectTime() async {
-    TimeOfDay? selectedTime = await showTimePicker(
+    final TimeOfDay? selectedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now()
     );
 
     if(selectedTime != null) {
-      controller.timeController.text =
-        "${selectedTime.hour}:${selectedTime.minute}";
+      DateTime parsedTime =
+          DateTime(1, 1, 1, selectedTime.hour, selectedTime.minute);
+      String formattedTime = DateFormat('H:mm').format(parsedTime);
+      controller.timeController.text = formattedTime;
     }
   }
 
@@ -81,7 +93,7 @@ Widget buildPage2(EventFormController controller, BuildContext context) {
           prefixIcon: Icons.calendar_month_rounded,
           controller: controller.dateController,
           readOnly: true,
-          onTap: selectDate,
+          onTap: selectDate
         ),
         FormTextBox(
           label: "Hora",
@@ -89,15 +101,15 @@ Widget buildPage2(EventFormController controller, BuildContext context) {
           prefixIcon: Icons.access_time_rounded,
           controller: controller.timeController,
           readOnly: true,
-          onTap: selectTime,
+          onTap: selectTime
         ),
-        MiTextBox(
+        FormTextBox(
           label: "Ubicación",
           hintText: "Selecciona en el mapa",
           prefixIcon: Icons.location_on_rounded,
         )
       ]
-    ),
+    )
   );
 }
 
@@ -215,10 +227,10 @@ Widget buildPage4(EventFormController controller) {
                     fontFamily: 'Poppins'
                 ),
               )
-            ],
+            ]
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }

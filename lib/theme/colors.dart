@@ -8,6 +8,7 @@ class AppColors{
   static const Color primaryText = Color(0xFFE5E7EB);
   static const Color secondaryText = Color(0xFF9CA3AF);
   static const Color accentedText = Color(0xFF14B8A6);
+  static const Color hintText = Color(0xFF4B5563);
 
   static const Color successColor = Color(0xFF16A34A);
   static const Color ambarColor = Color(0xFFFACC15);

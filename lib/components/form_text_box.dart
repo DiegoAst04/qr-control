@@ -43,10 +43,10 @@ class FormTextBox extends StatefulWidget {
   }): super(key: key);
 
   @override
-  _FormTextBoxState createState() => _FormTextBoxState();
+  FormTextBoxState createState() => FormTextBoxState();
 }
 
-class _FormTextBoxState extends State<FormTextBox> {
+class FormTextBoxState extends State<FormTextBox> {
   late TextEditingController _internalController;
   late FocusNode _internalFocusNode;
   late IconData? _currentIcon;
@@ -110,7 +110,6 @@ class _FormTextBoxState extends State<FormTextBox> {
         ? FontWeight.normal
         : FontWeight.w300;
     return TextStyle(
-      fontFamily: 'Poppins',
       fontWeight: labelWeight,
       fontSize: 14.0,
       color: labelColor
@@ -169,6 +168,7 @@ class _FormTextBoxState extends State<FormTextBox> {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 4,
       children: [
+        if (widget.label != null)
         Text(
           widget.label!,
           style: _buildLabelStyle()

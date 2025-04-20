@@ -29,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(
                   color: AppColors.primaryText,
                   fontSize: 20,
-                  fontFamily: 'Poppins'
                 ),
               ),
               EventBox(

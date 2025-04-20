@@ -15,17 +15,17 @@ class StepProgress extends StatefulWidget {
   final double currentStep;
   final double steps;
 
-  StepProgress({
+  const StepProgress({
     super.key,
     required this.currentStep,
     required this.steps
   });
 
   @override
-  _StepProgressState createState() => _StepProgressState();
+  StepProgressState createState() => StepProgressState();
 }
 
-class _StepProgressState extends State<StepProgress> {
+class StepProgressState extends State<StepProgress> {
   double widthProgress = 0;
 
   @override
@@ -39,7 +39,7 @@ class _StepProgressState extends State<StepProgress> {
       if (context.size is Size) {
         Size size = context.size!;
         setState(() {
-          widthProgress = size.width / widget.steps ;
+          widthProgress = (size.width - 40) / widget.steps; // - padding*2
         });
       }
     });
@@ -47,30 +47,28 @@ class _StepProgressState extends State<StepProgress> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 4,
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            color: AppColors.primaryText,
-            borderRadius: BorderRadius.circular(2)
-          ),
-          child: Stack(
-            children: [
-              AnimatedContainer(
-                width: widthProgress * (widget.currentStep + 1),
-                duration: Duration(milliseconds: 250),
-                decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.circular(8)
-                ),
-              )
-            ],
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Container(
+        height: 4,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: AppColors.primaryText,
+          borderRadius: BorderRadius.circular(2)
         ),
-      ],
+        child: Stack(
+          children: [
+            AnimatedContainer(
+              width: widthProgress * (widget.currentStep + 1),
+              duration: const Duration(milliseconds: 250),
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor,
+                borderRadius: BorderRadius.circular(8)
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
