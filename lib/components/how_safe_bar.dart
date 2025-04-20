@@ -17,21 +17,23 @@ class PasswordSafeBar extends StatefulWidget {
   });
 
   @override
-  _SafeBarState createState() => _SafeBarState();
+  SafeBarState createState() => SafeBarState();
 }
 
 enum _PasswordStrength { useless, weak, medium, strong }
 
-class _SafeBarState extends State<PasswordSafeBar> {
+class SafeBarState extends State<PasswordSafeBar> {
   _PasswordStrength _evalPasswordStrength() {
     String password = widget.password;
     if ((_hasCaps(password) || _hasNoCaps(password))
       && (_hasSpecialChars(password) || _hasNumbers(password)
       || password.length >= 6))
     {
-      if ((_hasCaps(password) && _hasNoCaps(password))
-        && (_hasSpecialChars(password) || _hasNumbers(password)
-        && password.length >= 8))
+      if ( password.length >= 8 &&
+        ((_hasCaps(password) && _hasNoCaps(password) && _hasNumbers(password))
+        || (_hasCaps(password) && _hasNoCaps(password) && _hasSpecialChars(password))
+        || (_hasCaps(password) && _hasNumbers(password)) && _hasSpecialChars(password))
+        || (_hasNoCaps(password) && _hasNumbers(password) && _hasSpecialChars(password)))
       {
         if ((_hasCaps(password) && _hasNoCaps(password))
           && (_hasSpecialChars(password) && _hasNumbers(password)
@@ -83,7 +85,7 @@ class _SafeBarState extends State<PasswordSafeBar> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Container(
+        SizedBox(
           width: double.infinity,
           child: FractionallySizedBox(
             alignment: Alignment.centerLeft,

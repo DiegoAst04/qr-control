@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'theme/theme.dart';
-import 'screens/login.dart';
-import 'screens/register.dart';
-import 'screens/new_event_form/new_event_form.dart';
-import 'screens/home.dart';
+import 'screens/screens.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +14,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'QR Control',
-      theme: AppTheme.darkTheme,
+      themeMode: ThemeMode.dark,
+      darkTheme: AppTheme.darkTheme,
       supportedLocales: const [
         Locale('es'),
         Locale('en', 'US')
@@ -28,7 +26,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate
       ],
       debugShowCheckedModeBanner: false,
-      home: NewEventForm(),
+      home: const NewEventFormScreen(),
     );
   }
 }
