@@ -12,12 +12,14 @@ class Button extends StatefulWidget {
   final String? text;
   final VoidCallback? onPressed;
   final IconData? prefixIcon;
+  final Color? color;
 
   const Button({
     super.key,
     this.text,
     this.onPressed,
-    this.prefixIcon
+    this.prefixIcon,
+    this.color
   });
 
   @override
@@ -30,7 +32,7 @@ class ButtonState extends State<Button> {
     return ElevatedButton(
       onPressed: widget.onPressed ?? () {},
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: widget.color ?? AppColors.primaryColor,
         iconColor: AppColors.primaryText,
         iconSize: 20
       ),

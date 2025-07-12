@@ -23,6 +23,7 @@ class FormTextBox extends StatefulWidget {
   final void Function(String)? onFieldSubmitted;
   final FocusNode? focusNode;
   final VoidCallback? onTap;
+  final TextInputType keyboardType;
 
   const FormTextBox({
     Key? key,
@@ -39,7 +40,8 @@ class FormTextBox extends StatefulWidget {
     this.onChanged,
     this.onFieldSubmitted,
     this.focusNode,
-    this.onTap
+    this.onTap,
+    this.keyboardType = TextInputType.text
   }): super(key: key);
 
   @override

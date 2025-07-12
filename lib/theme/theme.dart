@@ -56,8 +56,8 @@ class AppTheme {
       backgroundColor: AppColors.primaryDark,
       foregroundColor: AppColors.primaryText,
       titleTextStyle: GoogleFonts.poppins(
-          fontWeight: FontWeight.normal,
-          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          fontSize: 36,
           color: AppColors.primaryText
       ),
       //elevation: <int> /sombra del AppBar
@@ -94,6 +94,20 @@ class AppTheme {
            width: 2.0
          ),
         borderRadius: BorderRadius.circular(16)
+      ),
+      errorBorder: OutlineInputBorder(
+        borderSide: const BorderSide(
+          color: AppColors.errorColor,
+          width: 2.0
+        ),
+        borderRadius: BorderRadius.circular(16)
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: const BorderSide(
+          color: AppColors.errorColor,
+          width: 2.0
+        ),
+        borderRadius: BorderRadius.circular(16)
       )
     ),
     datePickerTheme: DatePickerThemeData(
@@ -103,6 +117,7 @@ class AppTheme {
       weekdayStyle: GoogleFonts.poppins(
         color: AppColors.secondaryColor
       ),
+
       locale: const Locale('es')
     ),
     timePickerTheme: TimePickerThemeData(
