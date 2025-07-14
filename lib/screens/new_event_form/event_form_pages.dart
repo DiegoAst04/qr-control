@@ -4,8 +4,13 @@ import 'package:qr_control/components/invitation.dart';
 import '../../components/widgets.dart';
 import '../../theme/colors.dart';
 import 'event_form_controller.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
-Widget buildPage1(EventFormController controller) {
+Widget buildPage1(
+    EventFormController controller,
+    ValueNotifier<String?> imagePathNotifier
+    ) {
   return GestureDetector(
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -37,7 +42,49 @@ Widget buildPage1(EventFormController controller) {
             controller: controller.descriptionController,
             textCapitalization: TextCapitalization.sentences,
             focusNode: controller.descriptionFocusNode,
-          )
+          ),
+          FormTextBox(
+            label: "Banner",
+            hintText: "Selecciona una imagen",
+            prefixIcon: Icons.image_rounded,
+            readOnly: true,
+            onTap: () async {
+              final ImagePicker picker = ImagePicker();
+              final XFile? image = await picker.pickImage(
+                  source: ImageSource.gallery
+              );
+              if (image!=null) {
+                controller.bannerPath = image.path;
+                imagePathNotifier.value = image.path;
+              }
+            },
+          ),
+
+          ValueListenableBuilder<String?>(
+            valueListenable: imagePathNotifier,
+            builder: (context, imagePath, _) {
+              if (imagePath == null) return const SizedBox.shrink();
+              return Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    image: FileImage(File(controller.bannerPath!)),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+              /* TODO: Revisar cómo funciona, también se puede usar (responsiveness):
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.file(
+                  File(imagePath),
+                  height: 150,
+                  fit: BoxFit.cover,
+                ),
+              ); */
+            },
+          ),
         ]
       )
     )
@@ -113,119 +160,123 @@ Widget buildPage2(EventFormController controller, BuildContext context) {
   );
 }
 
-Widget buildPage3() {
-  return Container();
+Widget buildPage3(EventFormController controller) {
+  return StatefulBuilder(
+    builder: (context, setState) {
+      List<int> getTotals() {
+        List<int> sum = [0, 0];
+        for (int i = 0; i < controller.zones.length; i++) {
+          sum[0] += controller.zones[i].capacityController.text.isNotEmpty
+              ? int.parse(controller.zones[i].capacityController.text)
+              : 0;
+          sum[1] += controller.zones[i].priceController.text.isNotEmpty
+              ? int.parse(controller.zones[i].priceController.text)
+                * int.parse(controller.zones[i].capacityController.text)
+              : 0;
+        }
+        return sum;
+      }
+      final List<int> totals = getTotals();
+
+      return Column(
+        children: [
+          Expanded(
+            child:
+              Column(
+                children: [
+                  ...List.generate(controller.zones.length, (i) {
+                    final zone = controller.zones[i];
+                    return ZoneCard(
+                      key: ValueKey(zone.id),
+                      zoneNameController: zone.zoneNameController,
+                      capacityController: zone.capacityController,
+                      priceController: zone.priceController,
+                      showDeleteButton: i != 0,
+                      onChanged: (_) => setState(() {}),
+                      onDelete: () {
+                        setState(() {
+                          controller.zones.removeAt(i);
+                        });
+                      },
+                    );
+                  }),
+                  OutlinedButton(
+                    onPressed: () {
+                      setState(() {
+                        controller.zones.add(ZoneData());
+
+                      });
+                    },
+                    child: Text("Añadir")
+                  )
+                ]
+              )
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.secondaryDark,
+              borderRadius: BorderRadius.circular(10)
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 4,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Aforo total"),
+                      Text("${totals[0]}")
+                    ]
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text("Ganancia potencial"),
+                      Text("${totals[1]}")
+                    ]
+                  )
+                ]
+              )
+            )
+          )
+        ]
+      );
+    }
+  );
 }
 
 Widget buildPage4(EventFormController controller) {
+  final PageController pageController = PageController(initialPage: 0);
 
-  String buildTitle() {
-    if (controller.artistController.text.isEmpty
-      && controller.eventNameController.text.isEmpty) {
-      return "[vacío]";
-    }
-    if (controller.artistController.text.isEmpty) {
-      return controller.eventNameController.text;
-    }
-    return "${controller.artistController.text}: ${controller.eventNameController.text}";
-  }
-
-  String buildDate() {
-    if (controller.dateController.text.isEmpty) {
-      return "[vacío]";
-    }
-    try {
-      DateTime parsedDate = DateFormat('dd/MM/yyyy').parse(controller.dateController.text);
-      String todo = DateFormat('yMMMMEEEEd', 'es').format(parsedDate);
-      return todo[0].toUpperCase() + todo.substring(1);
-    }
-    catch (e) {
-      return "[formato inválido]";
-    }
-  }
-
-  String buildTime() {
-    if (controller.timeController.text.isNotEmpty) {
-      DateTime parsedTime = DateFormat('h:mm').parse(controller.timeController.text);
-      String time = DateFormat('jm', 'es').format(parsedTime);
-      return time;
-    }
-    return "[vacío]";
-  }
-
-  return Center(
-    child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-          color: AppColors.secondaryDark,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-              color: Color(0xFF7A7A7A)
-          )
-      ),
-      child: Column(
-        spacing: 8,
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: double.infinity,
-            height: 100,
-            color: Colors.red,
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 10,
+      children: [
+        const Text(
+          "Así se verán tus widgets",
+          style: TextStyle(
+            fontWeight: FontWeight.w600
           ),
-          Text(
-            buildTitle(),
-            style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold
-            ),
-          ),
-          Row(
-            spacing: 8,
+        ),
+        Expanded(
+          child: PageView(
+            controller: pageController,
             children: [
-              const Icon(
-                Icons.calendar_month_rounded,
-                color: AppColors.primaryText,
+              Invitation(
+                bannerPath: controller.bannerPath!,
+                artist: controller.artistController.text,
+                eventName: controller.eventNameController.text,
+                date: controller.dateController.text,
+                time: controller.timeController.text
               ),
-              Text(
-                buildDate(),
-                style: const TextStyle(
-                    color: AppColors.primaryText,
-                    fontFamily: 'Poppins'
-                ),
-              )
-            ],
-          ),
-          Row(
-            spacing: 8,
-            children: [
-              const Icon(
-                Icons.access_time_rounded,
-                color: AppColors.primaryText,
-              ),
-              Text(
-                buildTime(),
-                style: const TextStyle(
-                    color: AppColors.primaryText,
-                    fontFamily: 'Poppins'
-                ),
-              )
-            ],
-          ),
-          const Row(
-            spacing: 8,
-            children: [
-              Icon(
-                Icons.place_rounded,
-                color: AppColors.primaryText,
-              ),
-              Text(
-                "Estadio Nacional, Lima, Perú",
-                style: TextStyle(
-                    color: AppColors.primaryText,
-                    fontFamily: 'Poppins'
-                ),
+              EventBox(
+                artist: controller.artistController.text,
+                date: DateTime.now(),
+                place: "Estadio La Molina"
               )
             ]
           ),

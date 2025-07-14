@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../models/zone_data.dart';
 
 class EventFormController {
   final TextEditingController eventNameController = TextEditingController();
@@ -6,6 +7,8 @@ class EventFormController {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
+  List<ZoneData> zones = [ZoneData()];
+  String? bannerPath = '';
 
   final FocusNode eventFocusNode = FocusNode();
   final FocusNode artistFocusNode = FocusNode();

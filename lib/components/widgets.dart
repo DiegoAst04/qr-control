@@ -4,4 +4,5 @@ export 'form_text_box.dart';
 export 'how_safe_bar.dart';
 export 'step_progress.dart';
 export 'text_box.dart';
-export 'add_artist.dart';
+export 'add_zone.dart';
+export '../models/zone_data.dart';

@@ -138,35 +138,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       )
                     ]
                   )
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 6,
-                  children: [
-                    const Text(
-                      "¿Aún no tienes una cuenta?",
-                      style: TextStyle(
-                        color: AppColors.primaryText,
-                      )
-                    ),
-                    Text.rich(
-                      TextSpan(
-                        text: "Regístrate",
-                        style: const TextStyle(
-                          color: AppColors.accentedText,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RegisterScreen()
-                              )
-                            );
-                          }
-                      )
-                    )
-                  ]
                 )
               ]
             )

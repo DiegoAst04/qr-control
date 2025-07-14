@@ -15,6 +15,7 @@ class NewEventFormScreen extends StatefulWidget {
 class NewEventFormState extends State<NewEventFormScreen> {
   final PageController _pageController = PageController(initialPage: 0);
   final EventFormController _formController = EventFormController();
+  final ValueNotifier<String?> _imagePathNotifier = ValueNotifier(null);
   double _currentPage = 0;
 
   @override
@@ -60,7 +61,7 @@ class NewEventFormState extends State<NewEventFormScreen> {
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      buildPage1(_formController),
+                      buildPage1(_formController, _imagePathNotifier),
                       buildPage2(_formController, context),
                       buildPage3(_formController),
                       buildPage4(_formController)

@@ -24,7 +24,15 @@ class _LandingScreenState extends State<LandingScreen> {
           child: Column(
             spacing: 24,
             children: [
-              const Image(image: AssetImage('assets/images/welcome_image.png')),
+            // TODO: arreglar imagen
+              Container(
+                width: double.infinity,
+                child: const Image(
+                  image: AssetImage('assets/images/welcome_image.png'),
+                  height: 420,
+                  fit: BoxFit.cover,
+                ),
+              ),
               Column(
                 spacing: 16,
                 children: [

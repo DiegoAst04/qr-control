@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:qr_control/screens/landing.dart';
 import 'theme/theme.dart';
 import 'screens/screens.dart';
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate
       ],
       debugShowCheckedModeBanner: false,
-      home: const NewEventFormScreen(),
+      home: const LandingScreen(),
     );
   }
 }
