@@ -77,15 +77,18 @@ class InvitationState extends State<Invitation> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (widget.bannerPath.isNotEmpty)
-            Container(
-              width: double.infinity,
-              height: 150,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: FileImage(File(widget.bannerPath)),
-                  fit: BoxFit.cover,
+            AspectRatio(
+              aspectRatio: 2,
+              child: Container(
+                width: double.infinity,
+                height: 150,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: FileImage(File(widget.bannerPath)),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(14)
                 ),
-                borderRadius: BorderRadius.circular(14)
               ),
             ),
           Text(

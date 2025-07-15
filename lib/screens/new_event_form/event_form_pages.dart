@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:qr_control/components/invitation.dart';
 import '../../components/widgets.dart';
 import '../../theme/colors.dart';
 import 'event_form_controller.dart';
@@ -43,48 +42,74 @@ Widget buildPage1(
             textCapitalization: TextCapitalization.sentences,
             focusNode: controller.descriptionFocusNode,
           ),
-          FormTextBox(
-            label: "Banner",
-            hintText: "Selecciona una imagen",
-            prefixIcon: Icons.image_rounded,
-            readOnly: true,
+          GestureDetector(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Banner",
+                  style: TextStyle(
+                    fontSize: 14.0
+                  ),
+                ),
+                ValueListenableBuilder<String?>(
+                  valueListenable: imagePathNotifier,
+                  builder: (context, imagePath, _) {
+                    return AspectRatio(
+                      aspectRatio: 2,
+                      child: imagePath == null
+                      ? Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: AppColors.secondaryDark,
+                            width: 2
+                          )
+                        ),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.image_rounded,
+                              size: 50,
+                              color: AppColors.secondaryText
+                            ),
+                            Text(
+                              "2 : 1",
+                              style: TextStyle(
+                                color: AppColors.secondaryText,
+                                fontSize: 16
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                      : Container(
+                        height: 150,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          image: DecorationImage(
+                            image: FileImage(File(controller.bannerPath!)),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
             onTap: () async {
               final ImagePicker picker = ImagePicker();
               final XFile? image = await picker.pickImage(
                   source: ImageSource.gallery
               );
-              if (image!=null) {
+              if (image != null) {
                 controller.bannerPath = image.path;
                 imagePathNotifier.value = image.path;
               }
             },
-          ),
-
-          ValueListenableBuilder<String?>(
-            valueListenable: imagePathNotifier,
-            builder: (context, imagePath, _) {
-              if (imagePath == null) return const SizedBox.shrink();
-              return Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                    image: FileImage(File(controller.bannerPath!)),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-              /* TODO: Revisar cómo funciona, también se puede usar (responsiveness):
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.file(
-                  File(imagePath),
-                  height: 150,
-                  fit: BoxFit.cover,
-                ),
-              ); */
-            },
-          ),
+          )
         ]
       )
     )
@@ -181,36 +206,39 @@ Widget buildPage3(EventFormController controller) {
       return Column(
         children: [
           Expanded(
-            child:
-              Column(
-                children: [
-                  ...List.generate(controller.zones.length, (i) {
-                    final zone = controller.zones[i];
-                    return ZoneCard(
-                      key: ValueKey(zone.id),
-                      zoneNameController: zone.zoneNameController,
-                      capacityController: zone.capacityController,
-                      priceController: zone.priceController,
-                      showDeleteButton: i != 0,
-                      onChanged: (_) => setState(() {}),
-                      onDelete: () {
-                        setState(() {
-                          controller.zones.removeAt(i);
-                        });
-                      },
-                    );
-                  }),
-                  OutlinedButton(
-                    onPressed: () {
-                      setState(() {
-                        controller.zones.add(ZoneData());
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: controller.zones.length + 1,
+              itemBuilder: (context, i) {
+                if (i == controller.zones.length) {
+                  return Center(
+                    child: OutlinedButton(
+                        onPressed: () {
+                          setState(() {
+                            controller.zones.add(ZoneData());
+                          });
+                        },
+                        child: Text("Añadir")
+                    ),
+                  );
+                }
 
-                      });
-                    },
-                    child: Text("Añadir")
-                  )
-                ]
-              )
+                final zone = controller.zones[i];
+                return ZoneCard(
+                  key: ValueKey(zone.id),
+                  zoneNameController: zone.zoneNameController,
+                  capacityController: zone.capacityController,
+                  priceController: zone.priceController,
+                  showDeleteButton: i != 0,
+                  onChanged: (_) => setState(() {}),
+                  onDelete: () {
+                    setState(() {
+                      controller.zones.removeAt(i);
+                    });
+                  },
+                );
+              }
+            ),
           ),
           Container(
             decoration: BoxDecoration(
