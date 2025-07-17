@@ -14,11 +14,13 @@ class StepProgress extends StatefulWidget {
 
   final double currentStep;
   final double steps;
+  final Size size;
 
   const StepProgress({
     super.key,
     required this.currentStep,
-    required this.steps
+    required this.steps,
+    required this.size
   });
 
   @override
@@ -26,23 +28,12 @@ class StepProgress extends StatefulWidget {
 }
 
 class StepProgressState extends State<StepProgress> {
-  double widthProgress = 0;
+  late double widthProgress;
 
   @override
   void initState() {
-    _onSizeWidget();
     super.initState();
-  }
-
-  void _onSizeWidget() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (context.size is Size) {
-        Size size = context.size!;
-        setState(() {
-          widthProgress = (size.width - 40) / widget.steps; // - padding*2
-        });
-      }
-    });
+    widthProgress = (widget.size.width - 40) / widget.steps;
   }
 
   @override
@@ -51,7 +42,7 @@ class StepProgressState extends State<StepProgress> {
       padding: const EdgeInsets.all(20),
       child: Container(
         height: 4,
-        width: MediaQuery.of(context).size.width,
+        width: widget.size.width,
         decoration: BoxDecoration(
           color: AppColors.primaryText,
           borderRadius: BorderRadius.circular(2)

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../components/widgets.dart';
 import '../../theme/colors.dart';
 import 'event_form_controller.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 Widget buildPage1(

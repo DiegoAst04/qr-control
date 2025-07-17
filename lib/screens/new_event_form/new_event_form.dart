@@ -37,6 +37,7 @@ class NewEventFormState extends State<NewEventFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.sizeOf(context);
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => {
@@ -51,6 +52,7 @@ class NewEventFormState extends State<NewEventFormScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               StepProgress(
+                size: size,
                 currentStep: _currentPage,
                 steps: 4
               ),
@@ -75,22 +77,25 @@ class NewEventFormState extends State<NewEventFormScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    if (_currentPage > 0)
+                      Button(
+                        prefixIcon: Icons.chevron_left,
+                        onPressed: () {
+                          _pageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.ease
+                          );
+                          FocusScope.of(context).unfocus();
+                        },
+                      ),
                     Button(
-                      prefixIcon: Icons.chevron_left,
-                      onPressed: () {
-                        _pageController.previousPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.ease
-                        );
-                      },
-                    ),
-                    Button(
-                      text: "Siguiente",
+                      text: _currentPage == 3 ? "Crear Evento" : "Siguiente",
                       onPressed: () {
                         _pageController.nextPage(
                           duration: const Duration(milliseconds: 300),
                           curve: Curves.ease
                         );
+                        FocusScope.of(context).unfocus();
                       }
                     ),
 

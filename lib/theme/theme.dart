@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'colors.dart';
 
 class AppTheme {
@@ -22,28 +21,32 @@ class AppTheme {
     scaffoldBackgroundColor: AppColors.primaryDark,
     hintColor: AppColors.hintText,
 
-    textTheme: TextTheme(     // Titulo login y register
-      displayLarge: GoogleFonts.poppins(
+    textTheme: const TextTheme(  // Titulo login y register
+      displayLarge: TextStyle(
+        fontFamily: 'Poppins',
         fontWeight: FontWeight.bold,
         fontSize: 36,
         color: AppColors.primaryText
       ),
-      titleMedium: GoogleFonts.poppins(     // Used on inputs
+      titleMedium: TextStyle(   // Used on inputs
+        fontFamily: 'Poppins',
         fontWeight: FontWeight.normal,
         color: AppColors.primaryText,
         fontSize: 16
       ),
-      bodyLarge: GoogleFonts.poppins(       // hintText
+      bodyLarge: TextStyle(     // texto ingresado
+        fontFamily: 'Poppins',
         fontWeight: FontWeight.normal,
         color: AppColors.primaryText,
         fontSize: 16
       ),
-      bodyMedium: GoogleFonts.poppins(
+      bodyMedium: TextStyle(    // general
+        fontFamily: 'Poppins',
         fontWeight: FontWeight.normal,
         color: AppColors.primaryText,
         fontSize: 16
       ),
-      labelMedium: GoogleFonts.poppins(
+      labelMedium: TextStyle(
         color: AppColors.primaryText
       )
     ),
@@ -52,13 +55,14 @@ class AppTheme {
       color: AppColors.primaryText
     ),
 
-    appBarTheme: AppBarTheme(
+    appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.primaryDark,
       foregroundColor: AppColors.primaryText,
-      titleTextStyle: GoogleFonts.poppins(
-          fontWeight: FontWeight.bold,
-          fontSize: 36,
-          color: AppColors.primaryText
+      titleTextStyle: TextStyle(
+        fontFamily: 'Poppins',
+        fontWeight: FontWeight.bold,
+        fontSize: 36,
+        color: AppColors.primaryText
       ),
       //elevation: <int> /sombra del AppBar
     ),
@@ -72,7 +76,8 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: AppColors.primaryDark,
-      hintStyle: GoogleFonts.poppins(
+      hintStyle: const TextStyle(
+        fontFamily: 'Poppins',
         color: AppColors.hintText
       ),
       contentPadding: const EdgeInsets.symmetric(
@@ -114,10 +119,32 @@ class AppTheme {
       backgroundColor: AppColors.secondaryDark,
       headerBackgroundColor: AppColors.primaryDark,
       dividerColor: AppColors.primaryColor,
-      weekdayStyle: GoogleFonts.poppins(
+      headerHeadlineStyle: const TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 30
+      ),
+      headerHelpStyle: const TextStyle(
+        fontFamily: 'Poppins',
+      ),
+      weekdayStyle: const TextStyle(
+        fontFamily: 'Poppins',
         color: AppColors.secondaryColor
       ),
-
+      dayStyle: const TextStyle(
+        fontFamily: 'Poppins',
+      ),
+      cancelButtonStyle: ButtonStyle(
+        foregroundColor: WidgetStateProperty.all(AppColors.secondaryColor),
+        textStyle: WidgetStateProperty.all(
+          const TextStyle(fontFamily: 'Poppins')
+        )
+      ),
+      confirmButtonStyle: ButtonStyle(
+        foregroundColor: WidgetStateProperty.all(AppColors.secondaryColor),
+        textStyle: WidgetStateProperty.all(
+          const TextStyle(fontFamily: 'Poppins')
+        )
+      ),
       locale: const Locale('es')
     ),
     timePickerTheme: TimePickerThemeData(
