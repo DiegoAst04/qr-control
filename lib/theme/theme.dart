@@ -14,8 +14,8 @@ class AppTheme {
       //background
       //onBackground
       //surface:
-      //error:
-      //onError:
+      error: AppColors.errorColor,
+      onError: AppColors.errorColor
     ),
     //secondaryHeaderColor: AppColors.secondaryColor,
     scaffoldBackgroundColor: AppColors.primaryDark,
