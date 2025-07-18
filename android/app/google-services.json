@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "992838576478",
+    "project_id": "qr-control-43d63",
+    "storage_bucket": "qr-control-43d63.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992838576478:android:dc5e67db7512bb6000c7cf",
+        "android_client_info": {
+          "package_name": "com.example.qr_control"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjyAi-VPa0v0PujsDxfF1iJvDk9_9vbHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
