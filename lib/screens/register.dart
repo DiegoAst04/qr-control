@@ -104,6 +104,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Necesitamos un email';
+                          } else if (!value.contains('@')) {
+                            return 'Email inválido';
                           }
                           return null;
                         },
@@ -192,7 +194,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               'firstName': firstName,
                               'lastName': lastName,
                               'email': email,
-                              'role': ''
+                              'role': 'assistant'
                             });
 
                             // Usuario creado
