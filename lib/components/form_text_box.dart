@@ -77,6 +77,7 @@ class FormTextBoxState extends State<FormTextBox> {
       _internalFocusNode = widget.focusNode!;
     }
     _internalFocusNode.addListener(() {
+      if (!mounted) return;
       setState(() {});
     });
   }

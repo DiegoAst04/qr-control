@@ -14,27 +14,30 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("¡Bienvenido!"),
-        //centerTitle: true,
-      ),
+      appBar: AppBar(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 24,
             children: [
+              Text(
+                "¡Bienvenido!",
+                style: Theme.of(context).textTheme.displayLarge
+              ),
             // TODO: arreglar imagen
               Container(
                 width: double.infinity,
-                child: const Image(
-                  image: AssetImage('assets/images/welcome_image.png'),
-                  height: 420,
+                height: 400,
+                child: Image.asset(
+                  'assets/images/welcome_image.png',
                   fit: BoxFit.cover,
                 ),
               ),
               Column(
-                spacing: 16,
+                spacing: 8,
                 children: [
                   Button(
                     text: "Inicia sesión",

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'register.dart';
@@ -13,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -49,6 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: Theme.of(context).textTheme.displayLarge
                 ),
                 Form(
+                  key: _formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     spacing: 16,
@@ -56,6 +59,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       FormTextBox(
                         label: "Email",
                         hintText: "myemail@example.com",
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Ingresa tu email';
+                          } else if (!value.contains('@')) {
+                            return 'Ingresa un email válido';
+                          }
+                          return null;
+                        },
                         controller: emailController,
                         focusNode: emailFocusNode,
                         prefixIcon: Icons.mail_rounded,
@@ -71,6 +82,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           FormTextBox(
                             label: "Contraseña",
                             hintText: "****************",
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Ingresa tu contraseña';
+                              }
+                              return null;
+                            },
                             controller: passwordController,
                             focusNode: passwordFocusNode,
                             prefixIcon: Icons.key_rounded,
@@ -98,13 +115,34 @@ class _LoginScreenState extends State<LoginScreen> {
                         ]
                       ),
                       Button(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomeScreen()
-                            )
-                          );
+                        onPressed: () async {
+                          if(!_formKey.currentState!.validate()) { return; }
+
+                          final email = emailController.text.trim();
+                          final password = passwordController.text.trim();
+
+                          try {
+                            await FirebaseAuth.instance.signInWithEmailAndPassword(
+                              email: email,
+                              password: password
+                            );
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HomeScreen()
+                              )
+                            );
+
+                          } on FirebaseAuthException catch (e) {
+                            debugPrint('EXCEPTION: ${e.code}');
+
+                            String mensaje = 'Email o contraseña incorrectos';
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(mensaje))
+                            );
+                          }
                         },
                         text: "Entrar",
                       )

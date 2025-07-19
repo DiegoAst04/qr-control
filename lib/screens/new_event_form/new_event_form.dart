@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../components/widgets.dart';
 import 'event_form_controller.dart';
@@ -20,12 +21,12 @@ class NewEventFormState extends State<NewEventFormScreen> {
 
   @override
   void initState() {
+    super.initState();
     _pageController.addListener(() {
       setState(() {
         _currentPage = _pageController.page!;
       });
     });
-    super.initState();
   }
 
   @override
@@ -38,6 +39,7 @@ class NewEventFormState extends State<NewEventFormScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => {
@@ -90,15 +92,32 @@ class NewEventFormState extends State<NewEventFormScreen> {
                       ),
                     Button(
                       text: _currentPage == 3 ? "Crear Evento" : "Siguiente",
-                      onPressed: () {
-                        _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.ease
-                        );
-                        FocusScope.of(context).unfocus();
+                      onPressed: () async {
+
+                        // Siguiente página
+                        if (_currentPage < 3) {
+                          _pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.ease
+                          );
+                          FocusScope.of(context).unfocus();
+                        } else {
+                          if (_formController.eventDateTime == null) {
+                            throw Exception("No se ha seleccionado una fecha");
+                          }
+                          await FirebaseFirestore.instance
+                              .collection("event")
+                              .add({
+                            "name": _formController.eventNameController.text.trim(),
+                            "artists": _formController.artistController.text.trim(),
+                            //"description": description,
+                            "dateTime": Timestamp.fromDate(_formController.eventDateTime!),
+                            //"banner": _formController.bannerPath,
+                            'createdAt': Timestamp.now(),
+                          });
+                        }
                       }
                     ),
-
                   ]
                 )
               )

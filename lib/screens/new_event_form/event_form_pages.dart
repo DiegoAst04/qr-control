@@ -117,8 +117,23 @@ Widget buildPage1(
 }
 
 Widget buildPage2(EventFormController controller, BuildContext context) {
+  void updateDateTime() {
+    final date = controller.selectedDate;
+    final time = controller.selectedTime;
+
+    if (date != null && time != null) {
+      controller.eventDateTime = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute
+      );
+    }
+  }
+
   Future<void> selectDate() async {
-    final DateTime? selectedDate = await showDatePicker(
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(
@@ -133,23 +148,26 @@ Widget buildPage2(EventFormController controller, BuildContext context) {
       )
     );
 
-    if (selectedDate != null) {
+    if (pickedDate != null) {
       controller.dateController.text =
-        "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
+        "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+      controller.selectedDate = pickedDate;
+      updateDateTime();
     }
   }
 
   Future<void> selectTime() async {
-    final TimeOfDay? selectedTime = await showTimePicker(
+    final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now()
     );
 
-    if(selectedTime != null) {
+    if(pickedTime != null) {
       DateTime parsedTime =
-          DateTime(1, 1, 1, selectedTime.hour, selectedTime.minute);
-      String formattedTime = DateFormat('H:mm').format(parsedTime);
-      controller.timeController.text = formattedTime;
+          DateTime(1, 1, 1, pickedTime.hour, pickedTime.minute);
+      controller.timeController.text = DateFormat('H:mm').format(parsedTime);
+      controller.selectedTime = pickedTime;
+      updateDateTime();
     }
   }
 
@@ -213,12 +231,12 @@ Widget buildPage3(EventFormController controller) {
                 if (i == controller.zones.length) {
                   return Center(
                     child: OutlinedButton(
-                        onPressed: () {
-                          setState(() {
-                            controller.zones.add(ZoneData());
-                          });
-                        },
-                        child: Text("Añadir")
+                      onPressed: () {
+                        setState(() {
+                          controller.zones.add(ZoneData());
+                        });
+                      },
+                      child: Text("Añadir")
                     ),
                   );
                 }

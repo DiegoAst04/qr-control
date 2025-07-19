@@ -9,6 +9,9 @@ class EventFormController {
   final TextEditingController timeController = TextEditingController();
   List<ZoneData> zones = [ZoneData()];
   String? bannerPath = '';
+  DateTime? selectedDate;
+  TimeOfDay? selectedTime;
+  DateTime? eventDateTime;
 
   final FocusNode eventFocusNode = FocusNode();
   final FocusNode artistFocusNode = FocusNode();
