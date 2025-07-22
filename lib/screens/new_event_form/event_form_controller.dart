@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../models/zone_data.dart';
+import '../../components/widgets.dart';
 
 class EventFormController {
   final TextEditingController eventNameController = TextEditingController();
   final TextEditingController artistController = TextEditingController();
+  List<TextEditingController> artists = [];
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController timeController = TextEditingController();

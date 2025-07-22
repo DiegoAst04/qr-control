@@ -8,110 +8,141 @@ import 'dart:io';
 
 Widget buildPage1(
     EventFormController controller,
-    ValueNotifier<String?> imagePathNotifier
+    ValueNotifier<String?> imagePathNotifier,
+    void Function(VoidCallback) setState
     ) {
   return GestureDetector(
-    child: Padding(
+    child: ListView(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        spacing: 20,
-        children: [
-          FormTextBox(
-            label: "Nombre del evento",
-            hintText: "Festival de bla bla",
-            prefixIcon: Icons.local_activity_rounded,
-            controller: controller.eventNameController,
-            textCapitalization: TextCapitalization.sentences,
-            focusNode: controller.eventFocusNode,
-            textInputAction: TextInputAction.next,
-          ),
-          FormTextBox(
-            label: "Artista(s)",
-            hintText: "Los Macarrones",
-            prefixIcon: Icons.music_note_rounded,
-            controller: controller.artistController,
-            textCapitalization: TextCapitalization.words,
-            focusNode: controller.artistFocusNode,
-            textInputAction: TextInputAction.next,
-          ),
-          FormTextBox(
-            label: "Descripción",
-            hintText: "Este evento bla bla",
-            prefixIcon: Icons.insert_comment_rounded,
-            controller: controller.descriptionController,
-            textCapitalization: TextCapitalization.sentences,
-            focusNode: controller.descriptionFocusNode,
-          ),
-          GestureDetector(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Column(
+          spacing: 20,
+          children: [
+            FormTextBox(
+              label: "Nombre del evento",
+              hintText: "Festival de bla bla",
+              prefixIcon: Icons.local_activity_rounded,
+              controller: controller.eventNameController,
+              textCapitalization: TextCapitalization.sentences,
+              focusNode: controller.eventFocusNode,
+              textInputAction: TextInputAction.next,
+            ),
+            Column(
+              spacing: 4,
               children: [
-                const Text(
-                  "Banner",
-                  style: TextStyle(
-                    fontSize: 14.0
+                FormTextBox(
+                  label: "Artista(s)",
+                  hintText: "Los Macarrones",
+                  prefixIcon: Icons.music_note_rounded,
+                  controller: controller.artistController,
+                  textCapitalization: TextCapitalization.words,
+                  focusNode: controller.artistFocusNode,
+                  textInputAction: TextInputAction.next,
+                ),
+                ...controller.artists.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final artist = entry.value;
+                  return FormTextBox(
+                    hintText: "Artista ${index + 2}",
+                    prefixIcon: Icons.music_note_rounded,
+                    controller: artist,
+                    textCapitalization: TextCapitalization.words,
+                    textInputAction: TextInputAction.next,
+                  );
+                }),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      setState(() {
+                        controller.artists.add(TextEditingController());
+                      });
+                    },
+                    icon: Icon(Icons.add),
+                    label: Text("Añadir artista"),
                   ),
                 ),
-                ValueListenableBuilder<String?>(
-                  valueListenable: imagePathNotifier,
-                  builder: (context, imagePath, _) {
-                    return AspectRatio(
-                      aspectRatio: 2,
-                      child: imagePath == null
-                      ? Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: AppColors.secondaryDark,
-                            width: 2
-                          )
-                        ),
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.image_rounded,
-                              size: 50,
-                              color: AppColors.secondaryText
-                            ),
-                            Text(
-                              "2 : 1",
-                              style: TextStyle(
-                                color: AppColors.secondaryText,
-                                fontSize: 16
-                              ),
+              ]
+            ),
+            FormTextBox(
+              label: "Descripción",
+              hintText: "Este evento bla bla",
+              prefixIcon: Icons.insert_comment_rounded,
+              controller: controller.descriptionController,
+              textCapitalization: TextCapitalization.sentences,
+              focusNode: controller.descriptionFocusNode,
+            ),
+            GestureDetector(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Banner",
+                    style: TextStyle(
+                      fontSize: 14.0
+                    ),
+                  ),
+                  ValueListenableBuilder<String?>(
+                    valueListenable: imagePathNotifier,
+                    builder: (context, imagePath, _) {
+                      return AspectRatio(
+                        aspectRatio: 2,
+                        child: imagePath == null
+                        ? Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: AppColors.secondaryDark,
+                              width: 2
                             )
-                          ],
-                        ),
-                      )
-                      : Container(
-                        height: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
-                            image: FileImage(File(controller.bannerPath!)),
-                            fit: BoxFit.cover,
+                          ),
+                          child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.image_rounded,
+                                size: 50,
+                                color: AppColors.secondaryText
+                              ),
+                              Text(
+                                "2 : 1",
+                                style: TextStyle(
+                                  color: AppColors.secondaryText,
+                                  fontSize: 16
+                                ),
+                              )
+                            ],
+                          ),
+                        )
+                        : Container(
+                          height: 150,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            image: DecorationImage(
+                              image: FileImage(File(controller.bannerPath!)),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-            onTap: () async {
-              final ImagePicker picker = ImagePicker();
-              final XFile? image = await picker.pickImage(
+                      );
+                    },
+                  ),
+                ],
+              ),
+              onTap: () async {
+                final ImagePicker picker = ImagePicker();
+                final XFile? image = await picker.pickImage(
                   source: ImageSource.gallery
-              );
-              if (image != null) {
-                controller.bannerPath = image.path;
-                imagePathNotifier.value = image.path;
-              }
-            },
-          )
-        ]
-      )
+                );
+                if (image != null) {
+                  controller.bannerPath = image.path;
+                  imagePathNotifier.value = image.path;
+                }
+              },
+            )
+          ]
+        )
+      ]
     )
   );
 }

@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import '../../components/widgets.dart';
 import 'event_form_controller.dart';
@@ -40,6 +42,38 @@ class NewEventFormState extends State<NewEventFormScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.sizeOf(context);
 
+    Future<void> createEvent() async {
+      if (_formController.eventDateTime == null) {
+        throw Exception("No se ha seleccionado una fecha");
+      }
+
+      final artistas = [
+        _formController.artistController.text.trim(),
+        ..._formController.artists
+            .map((controller) => controller.text.trim())
+            .where((text) => text.isNotEmpty)
+      ];
+
+      // TODO: Conectar con Google Cloud D:
+      //String? bannerUrl;
+      // if (_formController.bannerPath != null) {
+      //   final file = File(_formController.bannerPath!);
+      //   final ref = FirebaseStorage.instance
+      //       .ref()
+      //       .child('banners/${DateTime.now().millisecondsSinceEpoch}.jpg');
+      //   await ref.putFile(file);
+      //   bannerUrl = await ref.getDownloadURL();
+      // }
+      await FirebaseFirestore.instance.collection("event").add({
+        "name": _formController.eventNameController.text.trim(),
+        "artists": artistas,
+        //"description": description,
+        "dateTime": Timestamp.fromDate(_formController.eventDateTime!),
+        //"bannerUrl": bannerUrl,
+        'createdAt': Timestamp.now(),
+      });
+    }
+
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () => {
@@ -65,7 +99,7 @@ class NewEventFormState extends State<NewEventFormScreen> {
                     controller: _pageController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      buildPage1(_formController, _imagePathNotifier),
+                      buildPage1(_formController, _imagePathNotifier, setState),
                       buildPage2(_formController, context),
                       buildPage3(_formController),
                       buildPage4(_formController)
@@ -93,8 +127,6 @@ class NewEventFormState extends State<NewEventFormScreen> {
                     Button(
                       text: _currentPage == 3 ? "Crear Evento" : "Siguiente",
                       onPressed: () async {
-
-                        // Siguiente página
                         if (_currentPage < 3) {
                           _pageController.nextPage(
                             duration: const Duration(milliseconds: 300),
@@ -102,19 +134,21 @@ class NewEventFormState extends State<NewEventFormScreen> {
                           );
                           FocusScope.of(context).unfocus();
                         } else {
-                          if (_formController.eventDateTime == null) {
-                            throw Exception("No se ha seleccionado una fecha");
+                          try {
+                            await createEvent();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Evento creado exitosamente")
+                              )
+                            );
+                            //Navigator.pop(context);
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Error: $e")
+                              )
+                            );
                           }
-                          await FirebaseFirestore.instance
-                              .collection("event")
-                              .add({
-                            "name": _formController.eventNameController.text.trim(),
-                            "artists": _formController.artistController.text.trim(),
-                            //"description": description,
-                            "dateTime": Timestamp.fromDate(_formController.eventDateTime!),
-                            //"banner": _formController.bannerPath,
-                            'createdAt': Timestamp.now(),
-                          });
                         }
                       }
                     ),

@@ -26,7 +26,7 @@ class FormTextBox extends StatefulWidget {
   final TextInputType keyboardType;
 
   const FormTextBox({
-    Key? key,
+    super.key,
     this.label,
     this.hintText,
     this.validator,
@@ -42,7 +42,7 @@ class FormTextBox extends StatefulWidget {
     this.focusNode,
     this.onTap,
     this.keyboardType = TextInputType.text
-  }): super(key: key);
+  });
 
   @override
   FormTextBoxState createState() => FormTextBoxState();
