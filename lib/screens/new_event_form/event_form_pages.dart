@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../components/widgets.dart';
+import '../../models/models.dart';
 import '../../theme/colors.dart';
 import 'event_form_controller.dart';
 import 'dart:io';
@@ -28,26 +29,41 @@ Widget buildPage1(
               textInputAction: TextInputAction.next,
             ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 4,
               children: [
-                FormTextBox(
-                  label: "Artista(s)",
-                  hintText: "Los Macarrones",
-                  prefixIcon: Icons.music_note_rounded,
-                  controller: controller.artistController,
-                  textCapitalization: TextCapitalization.words,
-                  focusNode: controller.artistFocusNode,
-                  textInputAction: TextInputAction.next,
+                const Text(
+                  "Artista(s)",
+                  style: TextStyle(
+                      fontSize: 14.0
+                  ),
                 ),
                 ...controller.artists.asMap().entries.map((entry) {
-                  final index = entry.key;
+                  final i = entry.key;
                   final artist = entry.value;
-                  return FormTextBox(
-                    hintText: "Artista ${index + 2}",
-                    prefixIcon: Icons.music_note_rounded,
-                    controller: artist,
-                    textCapitalization: TextCapitalization.words,
-                    textInputAction: TextInputAction.next,
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: FormTextBox(
+                          hintText: artist.hintText,
+                          prefixIcon: Icons.music_note_rounded,
+                          controller: artist.controller,
+                          textCapitalization: TextCapitalization.words,
+                          textInputAction: TextInputAction.next,
+                        )
+                      ),
+                      if (controller.artists.length > 1)
+                      IconButton(
+                        onPressed: () {
+                          final removed = controller.artists[i];
+                          setState(() {
+                            controller.artists.removeAt(i);
+                          });
+                          removed.controller.dispose();
+                        },
+                        icon: Icon(Icons.close_rounded)
+                      ),
+                    ],
                   );
                 }),
                 Align(
@@ -55,7 +71,7 @@ Widget buildPage1(
                   child: OutlinedButton.icon(
                     onPressed: () {
                       setState(() {
-                        controller.artists.add(TextEditingController());
+                        controller.addArtist();
                       });
                     },
                     icon: Icon(Icons.add),
@@ -74,6 +90,7 @@ Widget buildPage1(
             ),
             GestureDetector(
               child: Column(
+                spacing: 4,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(

@@ -50,7 +50,7 @@ class NewEventFormState extends State<NewEventFormScreen> {
       final artistas = [
         _formController.artistController.text.trim(),
         ..._formController.artists
-            .map((controller) => controller.text.trim())
+            .map((controller) => controller.controller.text.trim())
             .where((text) => text.isNotEmpty)
       ];
 
