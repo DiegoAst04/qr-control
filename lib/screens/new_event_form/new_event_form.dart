@@ -1,6 +1,4 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import '../../components/widgets.dart';
 import 'event_form_controller.dart';
@@ -47,12 +45,10 @@ class NewEventFormState extends State<NewEventFormScreen> {
         throw Exception("No se ha seleccionado una fecha");
       }
 
-      final artistas = [
-        _formController.artistController.text.trim(),
-        ..._formController.artists
-            .map((controller) => controller.controller.text.trim())
-            .where((text) => text.isNotEmpty)
-      ];
+      final artistas = _formController.artists
+          .map((artist) => artist.controller.text.trim())
+          .where((text) => text.isNotEmpty)
+          .toList();
 
       // TODO: Conectar con Google Cloud D:
       //String? bannerUrl;

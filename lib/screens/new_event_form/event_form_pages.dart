@@ -42,9 +42,11 @@ Widget buildPage1(
                   final i = entry.key;
                   final artist = entry.value;
                   return Row(
+                    key: ValueKey(artist),
                     children: [
                       Expanded(
                         child: FormTextBox(
+                          key: ValueKey(artist.controller),
                           hintText: artist.hintText,
                           prefixIcon: Icons.music_note_rounded,
                           controller: artist.controller,
@@ -362,13 +364,20 @@ Widget buildPage4(EventFormController controller) {
             children: [
               Invitation(
                 bannerPath: controller.bannerPath!,
-                artist: controller.artistController.text,
+                // TODO: fix in case one or more
+                artist: controller.artists
+                    .map((a) => a.controller.text.trim())
+                    .where((text) => text.isNotEmpty)
+                    .join(', '),
                 eventName: controller.eventNameController.text,
                 date: controller.dateController.text,
                 time: controller.timeController.text
               ),
               EventBox(
-                artist: controller.artistController.text,
+                artist: controller.artists
+                    .map((a) => a.controller.text.trim())
+                    .where((text) => text.isNotEmpty)
+                    .join(', '),
                 date: DateTime.now(),
                 place: "Estadio La Molina"
               )

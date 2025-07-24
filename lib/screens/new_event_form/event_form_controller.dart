@@ -5,7 +5,6 @@ import 'dart:math';
 class EventFormController {
   // Page 1
   final TextEditingController eventNameController = TextEditingController();
-  final TextEditingController artistController = TextEditingController();
   List<ArtistInput> artists = [];
   final List<String> hintArtists = [
     "Los Macarrones",
@@ -46,7 +45,6 @@ class EventFormController {
 
   void dispose() {
     eventNameController.dispose();
-    artistController.dispose();
     descriptionController.dispose();
     dateController.dispose();
     timeController.dispose();
