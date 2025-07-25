@@ -13,7 +13,7 @@ import 'dart:io';
 
 class Invitation extends StatefulWidget {
   final String bannerPath;
-  final String artist;
+  final List<String> artists;
   final String eventName;
   final String date;
   final String time;
@@ -22,7 +22,7 @@ class Invitation extends StatefulWidget {
   const Invitation({
     super.key,
     required this.bannerPath,
-    required this.artist,
+    required this.artists,
     required this.eventName,
     required this.date,
     required this.time,
@@ -36,28 +36,23 @@ class Invitation extends StatefulWidget {
 class InvitationState extends State<Invitation> {
 
   String buildTitle() {
-    if (widget.artist.isEmpty && widget.eventName.isEmpty) {
-      return "[vacío]";
-    }
-    if (widget.artist.isEmpty) {
-      return widget.eventName;
-    }
-    return "${widget.artist}: ${widget.eventName}";
+    final artists = widget.artists;
+    final eventName = widget.eventName.trim();
+    if (artists.isEmpty && eventName.isEmpty) return "[vacío]";
+    if (eventName.isEmpty) return artists.join(', ');
+    if (artists.length != 1) return eventName;
+    return "${artists.single.trim()}: $eventName";
   }
 
   String buildDate() {
-    if (widget.date.isEmpty) {
-      return "[vacío]";
-    }
+    if (widget.date.isEmpty) return "[vacío]";
     DateTime parsedDate = DateFormat('dd/MM/yyyy').parse(widget.date);
     String todo = DateFormat('yMMMMEEEEd', 'es').format(parsedDate);
     return todo[0].toUpperCase() + todo.substring(1);
   }
 
   String buildTime() {
-    if (widget.time.isNotEmpty) {
-      return widget.time;
-    }
+    if (widget.time.isNotEmpty) return widget.time;
     return "[vacío]";
   }
 
@@ -83,21 +78,23 @@ class InvitationState extends State<Invitation> {
                 width: double.infinity,
                 height: 150,
                 decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: FileImage(File(widget.bannerPath)),
-                      fit: BoxFit.cover,
-                    ),
-                    borderRadius: BorderRadius.circular(14)
+                  image: DecorationImage(
+                    image: FileImage(File(widget.bannerPath)),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(14)
                 ),
               ),
             ),
           Text(
             buildTitle(),
             style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold
+              fontSize: 18,
+              fontWeight: FontWeight.bold
             ),
           ),
+          if (widget.artists.length > 1 && widget.eventName.trim().isNotEmpty)
+            Text(widget.artists.join(', ')),
           Row(
             spacing: 8,
             children: [

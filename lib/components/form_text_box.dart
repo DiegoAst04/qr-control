@@ -66,7 +66,7 @@ class FormTextBoxState extends State<FormTextBox> {
     _internalController.addListener(() {
       if (mounted) {
         setState(() {
-          hasText = _internalController.text.isNotEmpty;
+          hasText = _internalController.text.trim().isNotEmpty;
         });
       }
     });

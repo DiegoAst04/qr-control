@@ -68,18 +68,15 @@ Widget buildPage1(
                     ],
                   );
                 }),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: OutlinedButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        controller.addArtist();
-                      });
-                    },
-                    icon: Icon(Icons.add),
-                    label: Text("Añadir artista"),
-                  ),
-                ),
+                SecondaryButton(
+                  onPressed: (){
+                    setState(() {
+                      controller.addArtist();
+                    });
+                  },
+                  icon: Icons.add_rounded,
+                  label: "Añadir Artista",
+                )
               ]
             ),
             FormTextBox(
@@ -364,22 +361,22 @@ Widget buildPage4(EventFormController controller) {
             children: [
               Invitation(
                 bannerPath: controller.bannerPath!,
-                // TODO: fix in case one or more
-                artist: controller.artists
+                artists: controller.artists
                     .map((a) => a.controller.text.trim())
                     .where((text) => text.isNotEmpty)
-                    .join(', '),
+                    .toList(),
                 eventName: controller.eventNameController.text,
                 date: controller.dateController.text,
                 time: controller.timeController.text
               ),
               EventBox(
+                bannerPath: controller.bannerPath!,
                 artist: controller.artists
                     .map((a) => a.controller.text.trim())
                     .where((text) => text.isNotEmpty)
                     .join(', '),
-                date: DateTime.now(),
-                place: "Estadio La Molina"
+                date: controller.dateController.text,
+                location: "Estadio La Molina"
               )
             ]
           ),

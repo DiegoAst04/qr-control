@@ -1,4 +1,5 @@
 export 'button.dart';
+export 'secondary_button.dart';
 export 'event_box.dart';
 export 'form_text_box.dart';
 export 'how_safe_bar.dart';

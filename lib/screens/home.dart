@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:qr_control/theme/colors.dart';
-
+import '../theme/colors.dart';
 import '../components/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({
+    super.key
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -32,14 +33,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               EventBox(
+                bannerPath: "",
                 artist: "Twenty One Pilots: The Clancy World Tour",
-                date: DateTime(2025, 1, 19, 21),
-                place: "Estadio Bicentenario La Florida",
+                date: "19/01/25",
+                location: "Estadio Bicentenario La Florida",
               ),
               EventBox(
+                bannerPath: "",
                 artist: "Chayanne",
-                date: DateTime(2025, 7, 21, 21),
-                place: "Estadio Nacional"
+                date: "13/05/2004",
+                location: "Estadio Nacional"
               )
             ]
           )

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../theme/colors.dart';
+import 'dart:io';
 
 //   _____                _  ______
 //  |  ___|              | | | ___ \
@@ -9,16 +11,18 @@ import '../theme/colors.dart';
 //  \____/ \_/ \___|_| |_|\__\____/ \___/_/\_\
 
 class EventBox extends StatefulWidget {
+  final String bannerPath;
   final String artist;
-  final DateTime date;
-  final String place;
+  final String location;
+  final String date;
   final GestureTapCallback? onTap;
 
   const EventBox ({
     super.key,
+    required this.bannerPath,
     required this.artist,
+    required this.location,
     required this.date,
-    required this.place,
     this.onTap
   });
 
@@ -26,39 +30,12 @@ class EventBox extends StatefulWidget {
   EventBoxState createState() => EventBoxState();
 }
 class EventBoxState extends State<EventBox> {
-  int _getWeekDay() {
-    return widget.date.weekday - 1;
+  String buildDate() {
+    if (widget.date.isEmpty) return "[vacío]";
+    DateTime parsedDate = DateFormat('dd/MM/yyyy').parse(widget.date);
+    String todo = DateFormat('MMMMEEEEd', 'es').format(parsedDate);
+    return todo[0].toUpperCase() + todo.substring(1);
   }
-  int _getDate() {
-    return widget.date.day;
-  }
-  int _getMonth() {
-    return widget.date.month - 1;
-  }
-
-  static const List<String> weekDays = [
-    'Lunes',
-    'Martes',
-    'Miércoles',
-    'Jueves',
-    'Viernes',
-    'Sábado',
-    'Domingo'
-  ];
-  static const List<String> months = [
-    'enero',
-    'febrero',
-    'marzo',
-    'abril',
-    'mayo',
-    'junio',
-    'julio',
-    'agosto',
-    'setiembre',
-    'octubre',
-    'noviembre',
-    'diciembre'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +57,7 @@ class EventBoxState extends State<EventBox> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${weekDays[_getWeekDay()]} ${_getDate()} de ${months[_getMonth()]}",
+                      buildDate(),
                       style: const TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w100,
@@ -98,7 +75,7 @@ class EventBoxState extends State<EventBox> {
                       ),
                     ),
                     Text(
-                      widget.place,
+                      widget.location,
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.normal,
@@ -117,15 +94,11 @@ class EventBoxState extends State<EventBox> {
                     width: double.infinity,
                     height: 100,
                     decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.red
+                      image: DecorationImage(
+                        image: FileImage(File(widget.bannerPath)),
+                        fit: BoxFit.cover
                       ),
-                    ),
-                    child: const Text(
-                      "[Imagen]",
-                      style: TextStyle(
-                        color: AppColors.secondaryText
-                      ),
+                      borderRadius: BorderRadius.circular(12)
                     ),
                   )
                 ]
