@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../components/widgets.dart';
 import '../../models/models.dart';
 import '../../theme/colors.dart';
@@ -30,7 +31,7 @@ Widget buildPage1(
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 4,
+              spacing: 2,
               children: [
                 const Text(
                   "Artista(s)",
@@ -38,36 +39,61 @@ Widget buildPage1(
                       fontSize: 14.0
                   ),
                 ),
-                ...controller.artists.asMap().entries.map((entry) {
-                  final i = entry.key;
-                  final artist = entry.value;
-                  return Row(
-                    key: ValueKey(artist),
-                    children: [
-                      Expanded(
-                        child: FormTextBox(
-                          key: ValueKey(artist.controller),
-                          hintText: artist.hintText,
-                          prefixIcon: Icons.music_note_rounded,
-                          controller: artist.controller,
-                          textCapitalization: TextCapitalization.words,
-                          textInputAction: TextInputAction.next,
-                        )
+                ReorderableListView(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  onReorder: (oldIndex, newIndex) {
+                    setState(() {
+                      if (newIndex > oldIndex) newIndex -= 1;
+                      final moved = controller.artists.removeAt(oldIndex);
+                      controller.artists.insert(newIndex, moved);
+                    });
+                  },
+                  children: controller.artists.asMap().entries.map((entry) {
+                    final i = entry.key;
+                    final artist = entry.value;
+                    return Padding(
+                      key: ValueKey(artist),
+                      padding: const EdgeInsets.symmetric(vertical: 2),
+                      child: Row(
+                        children: [
+                          if (controller.artists.length > 1)
+                            ReorderableDragStartListener(
+                              index: i,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 2),
+                                child: Icon(
+                                  Icons.drag_indicator_rounded,
+                                  color: Colors.grey
+                                ),
+                              ),
+                            ),
+                          Expanded(
+                            child: FormTextBox(
+                              key: ValueKey(artist.controller),
+                              hintText: artist.hintText,
+                              prefixIcon: Icons.music_note_rounded,
+                              controller: artist.controller,
+                              textCapitalization: TextCapitalization.words,
+                              textInputAction: TextInputAction.next,
+                            ),
+                          ),
+                          if (controller.artists.length > 1)
+                            IconButton(
+                              onPressed: () {
+                                final removed = controller.artists[i];
+                                setState(() {
+                                  controller.artists.removeAt(i);
+                                });
+                                removed.controller.dispose();
+                              },
+                              icon: Icon(Icons.close_rounded),
+                            ),
+                        ],
                       ),
-                      if (controller.artists.length > 1)
-                      IconButton(
-                        onPressed: () {
-                          final removed = controller.artists[i];
-                          setState(() {
-                            controller.artists.removeAt(i);
-                          });
-                          removed.controller.dispose();
-                        },
-                        icon: Icon(Icons.close_rounded)
-                      ),
-                    ],
-                  );
-                }),
+                    );
+                  }).toList(),
+                ),
                 SecondaryButton(
                   onPressed: (){
                     setState(() {
@@ -277,13 +303,14 @@ Widget buildPage3(EventFormController controller) {
               itemBuilder: (context, i) {
                 if (i == controller.zones.length) {
                   return Center(
-                    child: OutlinedButton(
+                    child: SecondaryButton(
                       onPressed: () {
                         setState(() {
                           controller.zones.add(ZoneData());
                         });
                       },
-                      child: Text("Añadir")
+                      label: "Añadir",
+                      icon: Icons.add_rounded,
                     ),
                   );
                 }
@@ -381,6 +408,18 @@ Widget buildPage4(EventFormController controller) {
             ]
           ),
         ),
+        Center(
+          child: SmoothPageIndicator(
+            controller: pageController,
+            count: 2,
+            effect: ExpandingDotsEffect(
+              dotHeight: 12,
+              dotWidth: 12,
+              activeDotColor: AppColors.primaryColor,
+              dotColor: AppColors.secondaryText,
+            ),
+          ),
+        )
       ],
     ),
   );
